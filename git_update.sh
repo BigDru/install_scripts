@@ -105,7 +105,7 @@ for tag in ${tags[@]}; do
     fi
 
     versions=(${tag//./ })
-    if [[ $((${versions[2]})) -gt minor ]]; then
+    if [[ $((${versions[2]})) -gt patch ]]; then
         patch=$((${versions[2]}))
     fi
 done
