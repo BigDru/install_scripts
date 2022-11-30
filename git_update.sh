@@ -3,8 +3,10 @@
 path_to_repos="/root/repos/"
 git_repo_location=${path_to_repos}git
 
+command -v dnf &> /dev/null
 is_fedora=0
-if [[ `command -v dnf &> /dev/null` ]]; then
+
+if [[ $? -eq 0 ]]; then
     is_fedora=1
 fi
 
@@ -12,8 +14,8 @@ fi
 # command -v is a POSIX command that is also a Bash builtin
 echo Upgrading and installing dependencies
 if [[ is_fedora -eq 1 ]]; then
-    dnf upgrade --refresh
-    dnf install dh-autoreconf curl-devel expat-devel gettext-devel openssl-devel perl-devel zlib-devel asciidoc xmlto docbook2X getopt
+    dnf -y upgrade --refresh
+    dnf -y install dh-autoreconf curl-devel expat-devel gettext-devel openssl-devel perl-devel zlib-devel asciidoc xmlto docbook2X getopt
     ln -s /usr/bin/db2x_docbook2texi /usr/bin/dockbook2x-texi
 else
     apt update
@@ -22,12 +24,13 @@ else
 fi
 
 # Check if we have git installed
-if [[ ! `command -v git &> /dev/null` ]]; then
+command -v git &> /dev/null
+if [[ $? -eq 1 ]]; then
     echo Installing git from distro package list
     if [[ is_fedora -eq 1 ]]; then
-        dnf install git
+        dnf -y install git
     else
-        apt install git -y
+        apt install -y git
     fi
 fi
 
