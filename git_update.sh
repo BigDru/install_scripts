@@ -118,10 +118,17 @@ current_major=$((current_versions[0]))
 current_minor=$((current_versions[1]))
 current_patch=$((current_versions[2]))
 
-if [[ $major -gt $current_major || $minor -gt $current_minor || $patch -gt $current_patch ]]; then
-    echo Currently installed version is old. Beginning update..
+if [[ $major -eq $current_major && $minor -eq $current_minor && $patch -eq $current_patch ]]; then
+    echo Already at latest version
     echo
+    echo popd:
+    popd
+    exit 0
 fi
+
+echo Currently installed version is old. Beginning update..
+echo
+git checkout tags/v${major}.${minor}.${patch}
 
 echo popd:
 popd
