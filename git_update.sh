@@ -58,11 +58,70 @@ if [[ $need_to_clone -ne 1 ]]; then
     echo
 fi
 
-echo Checking tags
+echo Finding latest released tag:
+
+# find major
+tags=`git tag -l "v*"`
+major=0
+for tag in ${tags[@]}; do
+    # skip release candidates (contain dash '-' character)
+    if [[ $tag == *"-"* ]]; then
+        continue
+    fi
+
+    tag=${tag:1}
+    versions=(${tag//./ })
+    if [[ $((${versions[0]})) -gt major ]]; then
+        major=$((${versions[0]}))
+    fi
+done
+
+echo Major: $major
+
+# find minor
+tags=`git tag -l "v${major}.*"`
+minor=0
+for tag in ${tags[@]}; do
+    # skip release candidates (contain dash '-' character)
+    if [[ $tag == *"-"* ]]; then
+        continue
+    fi
+
+    versions=(${tag//./ })
+    if [[ $((${versions[1]})) -gt minor ]]; then
+        minor=$((${versions[1]}))
+    fi
+done
+
+echo Minor: $minor
+
+# find patch
+tags=`git tag -l "v${major}.${minor}.*"`
+patch=0
+for tag in ${tags[@]}; do
+    # skip release candidates (contain dash '-' character)
+    if [[ $tag == *"-"* ]]; then
+        continue
+    fi
+
+    versions=(${tag//./ })
+    if [[ $((${versions[2]})) -gt minor ]]; then
+        patch=$((${versions[2]}))
+    fi
+done
+
+echo Patch: $patch
 echo
 
-echo Latest git version:
-echo
+current_versions=(${local_git_version//./ })
+current_major=$((current_versions[0]))
+current_minor=$((current_versions[1]))
+current_patch=$((current_versions[2]))
+
+if [[ $major -gt $current_major || $minor -gt $current_minor || $patch -gt $current_patch ]]; then
+    echo Currently installed version is old. Beginning update..
+    echo
+fi
 
 echo popd:
 popd
