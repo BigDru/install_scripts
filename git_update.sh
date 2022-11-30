@@ -149,6 +149,17 @@ fi
 echo Currently installed version is old. Beginning update..
 echo
 git checkout tags/v${major}.${minor}.${patch}
+echo
+
+make config
+./configure --prefix=/usr
+make all doc info
+make install install-doc install-html install-info
+
+echo
 
 echo popd:
 popd
+
+echo Done updating!
+git --version
