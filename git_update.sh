@@ -154,10 +154,8 @@ echo
 git checkout tags/v${major}.${minor}.${patch}
 echo
 
-make config
-./configure --prefix=/usr
-make all doc info
-make install install-doc install-html install-info
+make prefix=/usr all doc info
+make prefix=/usr install install-doc install-html install-info
 
 echo
 
