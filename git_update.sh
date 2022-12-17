@@ -1,6 +1,5 @@
 #!/bin/bash
 
-path_to_repos="/root/repos/"
 git_repo_location=${path_to_repos}git
 
 has_dnf_query=`command -v dnf`
@@ -15,7 +14,7 @@ fi
 echo Upgrading and installing dependencies
 if [[ has_dnf -eq 1 ]]; then
     dnf -y upgrade --refresh
-    dnf -y install dh-autoreconf curl-devel expat-devel gettext-devel openssl-devel perl-devel zlib-devel asciidoc xmlto docbook2X getopt
+    dnf -y install dh-autoreconf curl-devel expat-devel gettext-devel openssl-devel perl-devel zlib-devel asciidoc xmlto docbook2X util-linux make automake gcc gcc-c++ kernel-devel
     ln -s /usr/bin/db2x_docbook2texi /usr/bin/dockbook2x-texi
 else
     apt update
